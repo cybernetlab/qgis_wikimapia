@@ -22,22 +22,49 @@
 
 from PyQt4 import QtCore, QtGui
 from ui_wikimapia_widget import Ui_WikimapiaWidget
-from wikimapia_config import WikimapiaConfig
-from wikimapia_api import WikimapiaApi
+
+import anydbm
+import os.path
 
 class WikimapiaWidget(QtGui.QDockWidget, Ui_WikimapiaWidget):
-    def __init__(self):
+    def __init__(self, config):
         QtGui.QWidget.__init__(self)
-        self.api = WikimapiaApi()
-        # Set up the user interface from Designer.
-        # After setupUI you can access any designer object by doing
-        # self.<objectname>, and you can use autoconnect slots - see
-        # http://qt-project.org/doc/qt-4.8/designer-using-a-ui-file.html
-        # #widgets-and-dialogs-with-auto-connect
+        self.config = config
         self.setupUi(self)
+#        self.loadCategoryCombo()
+
+#    def show(self):
+#        super(WikimapiaWidget, self).show()
 
 #    def setTextBrowser(self, output):
 #        self.txtFeedback.setText(output)
 
 #    def clearTextBrowser(self):
 #        self.txtFeedback.clear()
+
+    def changeActive(self, state):
+        if state == Qt.Checked:
+            QObject.connect(
+                self.clickTool,
+                SIGNAL("canvasClicked(const QgsPoint &, Qt::MouseButton)"),
+                self.selectFeature)
+        else:
+            QObject.disconnect(
+                self.clickTool,
+                SIGNAL("canvasClicked(const QgsPoint &, Qt::MouseButton)"),
+                self.selectFeature)
+
+    def selectFeature(self):
+        pass
+
+
+    def updateImportButton(self):
+        if category
+
+    def loadCategoryCombo(self):
+        # print self.categoryCombo.count
+        #if self.categoryCombo.count() > 0: return
+        db = anydbm.open(os.path.join(self.config.db_dir, 'categories.db'), 'c')
+        for id, val in db.iteritems():
+            self.categoryCombo.addItem(val.decode('utf-8') + ' (id: ' + id + ')', id)
+        db.close()

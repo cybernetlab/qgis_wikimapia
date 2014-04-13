@@ -56,9 +56,11 @@ class Wikimapia:
             if qVersion() > '4.3.3':
                 QCoreApplication.installTranslator(self.translator)
 
+        self.config = WikimapiaConfig(self.plugin_dir, iface)
+
         # Create the dialog (after translation) and keep reference
-        self.widget = WikimapiaWidget()
-        self.settings = WikimapiaSettings()
+        self.widget = WikimapiaWidget(self.config)
+        self.settings = WikimapiaSettings(self.config)
 
     def initGui(self):
         # Create action that will start plugin widget
@@ -87,13 +89,7 @@ class Wikimapia:
 
     # run method that performs all the real work
     def run(self):
-        self.config = WikimapiaConfig()
-        if not self.config.api_key or not self.config.categories_updated:
-            QMessageBox.information(
-                self.iface.mainWindow(),
-                'Info',
-                'It seems that you are still not configure api_key, please set up it in settings dialog'
-            )
+        if not self.config.complete():
             if not self.run_settings(): return
         # show widget
         self.addDockWidget(self.widget, Qt.LeftDockWidgetArea)
@@ -101,9 +97,6 @@ class Wikimapia:
     def run_settings(self):
         self.settings.show()
         return self.settings.exec_()
-
-    def config(self):
-        pass
 
     def addDockWidget(self, wdg, position = None):
         self.iface.addDockWidget(position, wdg)

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_wikimapia_settings.ui'
 #
-# Created: Sun Apr 13 01:19:11 2014
+# Created: Sun Apr 13 15:34:50 2014
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -29,6 +29,16 @@ class Ui_WikimapiaSettings(object):
         WikimapiaSettings.resize(400, 300)
         self.verticalLayout = QtGui.QVBoxLayout(WikimapiaSettings)
         self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
+        self.firstStartText = QtGui.QTextBrowser(WikimapiaSettings)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.firstStartText.sizePolicy().hasHeightForWidth())
+        self.firstStartText.setSizePolicy(sizePolicy)
+        self.firstStartText.setMinimumSize(QtCore.QSize(0, 0))
+        self.firstStartText.setStyleSheet(_fromUtf8("background-color: rgb(255, 255, 127);"))
+        self.firstStartText.setObjectName(_fromUtf8("firstStartText"))
+        self.verticalLayout.addWidget(self.firstStartText)
         self.formLayout = QtGui.QFormLayout()
         self.formLayout.setObjectName(_fromUtf8("formLayout"))
         self.apiKeyLabel = QtGui.QLabel(WikimapiaSettings)
@@ -80,6 +90,11 @@ class Ui_WikimapiaSettings(object):
 
     def retranslateUi(self, WikimapiaSettings):
         WikimapiaSettings.setWindowTitle(_translate("WikimapiaSettings", "Wikimapia Plugin Settings", None))
+        self.firstStartText.setHtml(_translate("WikimapiaSettings", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'Sans\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">It seems that you start wikimapia plugin first time. Please, fill wikimapia api key below and load wikimapia categories by pressing \'Load now\' button.</p></body></html>", None))
         self.apiKeyLabel.setText(_translate("WikimapiaSettings", "api key", None))
         self.apiUrlLabel.setText(_translate("WikimapiaSettings", "api url", None))
         self.apiDelayLabel.setText(_translate("WikimapiaSettings", "api delay (msec)", None))

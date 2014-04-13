@@ -22,19 +22,21 @@
 
 from PyQt4 import QtCore, QtGui
 from ui_wikimapia_settings import Ui_WikimapiaSettings
-from wikimapia_config import WikimapiaConfig
-from wikimapia_api import WikimapiaApi
 
 import anydbm
 from datetime import datetime
+import os.path
 
 class WikimapiaSettings(QtGui.QDialog, Ui_WikimapiaSettings):
-    def __init__(self):
+    def __init__(self, config):
         QtGui.QDialog.__init__(self)
-        self.config = WikimapiaConfig()
+        self.config = config
         self.setupUi(self)
-        self.progressBar.hide()
         self.categoriesButton.clicked.connect(self.updateCategories)
+
+    def show(self):
+        self.progressBar.hide()
+        if self.config.complete(): self.firstStartText.hide()
         self.apiKeyEdit.setText(self.config.api_key)
         self.apiUrlEdit.setText(self.config.api_url)
         self.apiDelayEdit.setValue(self.config.api_delay)
@@ -44,22 +46,32 @@ class WikimapiaSettings(QtGui.QDialog, Ui_WikimapiaSettings):
         else:
             self.categoriesButton.setText('Load now')
             self.categoriesLabel.setText('not loaded. Push "Load now" to load')
+        super(WikimapiaSettings, self).show()
 
     def accept(self):
+        if not self.apiKeyEdit.text():
+            self.apiKeyEdit.setStyleSheet(
+                "QLineEdit { background-color: rgb(255, 170, 170); }")
+            return
+        if not self.config.categories_updated:
+            self.categoriesLabel.setStyleSheet(
+                "QLabel { color: rgb(255, 170, 170); }")
+            return
+        self.saveConfig()
         super(WikimapiaSettings, self).accept()
 
     def saveConfig(self):
         self.config.api_key = self.apiKeyEdit.text()
         self.config.api_url = self.apiUrlEdit.text()
         self.config.api_delay = self.apiDelayEdit.value()
+        self.config.save()
 
     def updateCategories(self):
         self.progressBar.show()
         self.progressBar.setValue(0)
-        db = anydbm.open('categories', 'c')
+        db = anydbm.open(os.path.join(self.config.db_dir, 'categories.db'), 'c')
         db.clear()
-        api = WikimapiaApi()
-        categories = api.get_categories()
+        categories = self.config.api.get_categories()
         self.progressBar.setMaximum(len(categories))
         for cat in categories:
             db[str(cat['id'])] = cat['name'].encode('utf-8')
@@ -70,3 +82,4 @@ class WikimapiaSettings(QtGui.QDialog, Ui_WikimapiaSettings):
         self.categoriesButton.setText('Update now')
         self.categoriesLabel.setText(
             'updated at ' + str(self.config.categories_updated))
+        self.config.save()
