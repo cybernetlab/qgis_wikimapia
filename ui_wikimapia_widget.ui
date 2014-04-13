@@ -82,26 +82,13 @@
            <property name="text">
             <string>Select Location</string>
            </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="categoryCombo">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>100</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="editable">
+           <property name="checkable">
             <bool>true</bool>
            </property>
           </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="categoryEdit"/>
          </item>
          <item>
           <widget class="QPushButton" name="importButton">
