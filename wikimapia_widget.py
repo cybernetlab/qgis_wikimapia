@@ -21,6 +21,7 @@
 """
 
 from PyQt4 import QtCore, QtGui
+from PyQt4.QtCore import QVariant
 from ui_wikimapia_widget import Ui_WikimapiaWidget
 
 from qgis.core import *
@@ -43,6 +44,8 @@ class WikimapiaWidget(QtGui.QDockWidget, Ui_WikimapiaWidget):
         self.categoriesEdit.editingFinished.connect(self.categoriesChanged)
         self.importButton.clicked.connect(self.doImport)
         self.wgs = crs = QgsCoordinateReferenceSystem(4326)
+        self.memory_layer = None
+        self.memory_layer_index = 0
         self.bounds = None
 
 
@@ -97,9 +100,46 @@ class WikimapiaWidget(QtGui.QDockWidget, Ui_WikimapiaWidget):
             self.categoryCombo.addItem(val.decode('utf-8') + ' (id: ' + id + ')', id)
         db.close()
 
+    def createLayer(self):
+        selectedIndex = self.destCombo.currentIndex()
+        if selectedIndex == 2:
+            layer = self.iface.activeLayer()
+            if not layer or layer.type() != QgsMapLayer.VectorLayer:
+                self.iface.messageBar().pushMessage(
+                    'Error',
+                    'You select `current layer` as import destination but '
+                    'where are no vector layer selected. Please, select '
+                    'vector layer',
+                    level = QgsMessageBar.FATAL,
+                    duration = 3)
+                return None
+            return layer
+        layer = None
+        if selectedIndex == 0: layer = self.memory_layer
+        if layer is not None: return layer
+        uri = ('Polygon?crs=epsg:4326&'
+               'filed=id:integer&'
+               'field=wm_id:integer&'
+               'field=name:string(100)&'
+               'field=description:string(500)')
+        name = 'temporary_wikimapia'
+        if selectedIndex == 1:
+            name += '_{:03i}'.format(self.memory_layer_index)
+            self.memory_layer_index += 1
+        layer = QgsVectorLayer(uri, name, 'memory')
+        if not layer.isValid():
+            self.iface.messageBar().pushMessage(
+                'Error',
+                'Error creating wikimapia layer',
+                level = QgsMessageBar.CRITICAL,
+                duration = 3)
+        if selectedIndex == 0: self.memory_layer = layer
+        return layer
+
     def doImport(self):
         t = QgsCoordinateTransform(self.boundsLayer.crs(), self.wgs)
-        rect = self.bounds.geometry().boundingBox()
+        bounds = self.bounds.geometry()
+        rect = bounds.boundingBox()
         p1 = t.transform(QgsPoint(rect.xMinimum(), rect.yMinimum()))
         p2 = t.transform(QgsPoint(rect.xMaximum(), rect.yMaximum()))
         places = self.config.api.get_place_by_area(
@@ -107,34 +147,32 @@ class WikimapiaWidget(QtGui.QDockWidget, Ui_WikimapiaWidget):
             {'category': self.categoriesEdit.text()})
 
         # create layer
-        vl = QgsVectorLayer("Wikimapia", "temporary_wikimapia", "memory")
+        vl = self.createLayer()
+        if vl is None: return
         prov = vl.dataProvider()
 
-        # add fields
-        #pr.addAttributes( [ QgsField("name", QVariant.String),
-        #                    QgsField("age",  QVariant.Int),
-        #                    QgsField("size", QVariant.Double) ] )
-
-        # add a feature
-        total = 0
+        # add a features
         for place in places:
-            #if 'polygon' not in place: continue
+            if 'polygon' not in place: continue
             ring = []
             for p in place['polygon']:
-                ring.append(t.transform(
-                    QgsPoint(p['x'], p['y']),
-                    QgsCoordinateTransform.ReverseTransform))
-            feature = QgsFeature()
-            geometry = QgsGeometry()
-            geometry.addRing(ring)
+                ring.append(QgsPoint(p['x'], p['y']))
+            geometry = QgsGeometry.fromPolygon([ring])
+            if not bounds.contains(geometry): continue
+            feature = QgsFeature(id = place['id'])
             feature.setGeometry(geometry)
-            #fet.setAttributes(["Johny", 2, 0.3])
+            title = (place['title'] if 'title' in place else '')
+            descr = (place['description'] if 'description' in place else '')
+            feature.setAttributes([place['id'], title, descr])
             prov.addFeatures([feature])
-            total += 1
-        self.iface.messageBar().pushMessage('total', str(total))
 
         # update layer's extent when new features have been added
         # because change of extent in provider is not propagated to the layer
         vl.updateExtents()
         QgsMapLayerRegistry.instance().addMapLayer(vl)
 
+        self.iface.messageBar().pushMessage(
+            'import successfull',
+            '{:i} features imported successfully'.format(prov.featureCount()),
+            duration = 3)
+        self.boundsLayer.removeSelection()
