@@ -82,10 +82,14 @@ class WikimapiaApi(object):
         self.last_call = None
 
     def get_place_by_id(self, id):
+        if 'data_blocks' not in opts:
+            opts['data_blocks'] = 'main,geometry,location'
         return self.request('place.getbyid', {'id': id})
 
     def get_place_by_area(self, x1, y1, x2, y2, opts = {}):
         opts['bbox'] = "{x1},{y1},{x2},{y2}".format(**locals())
+        if 'data_blocks' not in opts:
+            opts['data_blocks'] = 'main,geometry,location'
         return WikimapiaIterator(self, 'place.getbyarea', 'places', opts)
 
     def get_categories(self, name = None):

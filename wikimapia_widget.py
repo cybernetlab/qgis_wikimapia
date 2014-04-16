@@ -121,10 +121,10 @@ class WikimapiaWidget(QtGui.QDockWidget, Ui_WikimapiaWidget):
                'filed=id:integer&'
                'field=wm_id:integer&'
                'field=name:string(100)&'
-               'field=description:string(500)')
+               'field=description:string(5000)')
         name = 'temporary_wikimapia'
         if selectedIndex == 1:
-            name += '_{:03i}'.format(self.memory_layer_index)
+            name += '_{:03d}'.format(self.memory_layer_index)
             self.memory_layer_index += 1
         layer = QgsVectorLayer(uri, name, 'memory')
         if not layer.isValid():
@@ -159,7 +159,7 @@ class WikimapiaWidget(QtGui.QDockWidget, Ui_WikimapiaWidget):
                 ring.append(QgsPoint(p['x'], p['y']))
             geometry = QgsGeometry.fromPolygon([ring])
             if not bounds.contains(geometry): continue
-            feature = QgsFeature(id = place['id'])
+            feature = QgsFeature()
             feature.setGeometry(geometry)
             title = (place['title'] if 'title' in place else '')
             descr = (place['description'] if 'description' in place else '')
@@ -169,10 +169,13 @@ class WikimapiaWidget(QtGui.QDockWidget, Ui_WikimapiaWidget):
         # update layer's extent when new features have been added
         # because change of extent in provider is not propagated to the layer
         vl.updateExtents()
+
+        for symbol in vl.rendererV2().symbols(): symbol.setAlpha(0.5)
+
         QgsMapLayerRegistry.instance().addMapLayer(vl)
 
         self.iface.messageBar().pushMessage(
             'import successfull',
-            '{:i} features imported successfully'.format(prov.featureCount()),
+            '{0} features imported successfully'.format(prov.featureCount()),
             duration = 3)
         self.boundsLayer.removeSelection()
