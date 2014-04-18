@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_wikimapia_settings.ui'
 #
-# Created: Sun Apr 13 18:07:17 2014
+# Created: Fri Apr 18 15:20:15 2014
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,7 +26,10 @@ except AttributeError:
 class Ui_WikimapiaSettings(object):
     def setupUi(self, WikimapiaSettings):
         WikimapiaSettings.setObjectName(_fromUtf8("WikimapiaSettings"))
-        WikimapiaSettings.resize(400, 300)
+        WikimapiaSettings.resize(400, 290)
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/plugins/wikimapia/icons/wikimapia-settings.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        WikimapiaSettings.setWindowIcon(icon)
         self.verticalLayout = QtGui.QVBoxLayout(WikimapiaSettings)
         self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
         self.firstStartText = QtGui.QTextBrowser(WikimapiaSettings)
@@ -36,6 +39,7 @@ class Ui_WikimapiaSettings(object):
         sizePolicy.setHeightForWidth(self.firstStartText.sizePolicy().hasHeightForWidth())
         self.firstStartText.setSizePolicy(sizePolicy)
         self.firstStartText.setMinimumSize(QtCore.QSize(0, 0))
+        self.firstStartText.setMaximumSize(QtCore.QSize(16777215, 80))
         self.firstStartText.setStyleSheet(_fromUtf8("background-color: rgb(255, 255, 127);"))
         self.firstStartText.setObjectName(_fromUtf8("firstStartText"))
         self.verticalLayout.addWidget(self.firstStartText)
@@ -102,3 +106,4 @@ class Ui_WikimapiaSettings(object):
         self.categoriesLabel.setText(_translate("WikimapiaSettings", "updated at", None))
         self.categoriesButton.setText(_translate("WikimapiaSettings", "Update now", None))
 
+import resources_rc

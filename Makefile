@@ -25,19 +25,32 @@ QGISDIR=.qgis2
 # Makefile for a PyQGIS plugin
 
 # translation
-SOURCES = wikimapia.py ui_wikimapia.py ui_wikimapia_widget.py ui_wikimapia_settings.py __init__.py
-#TRANSLATIONS = i18n/wikimapia_en.ts
-TRANSLATIONS =
+SOURCES = wikimapia.py \
+ 				  wikimapia_config.py \
+					wikimapia_widget.py \
+					wikimapia_settings.py \
+				  ui_wikimapia_widget.py \
+				  ui_wikimapia_settings.py \
+				  __init__.py
+TRANSLATIONS = i18n/wikimapia_ru.ts
 
 # global
 
 PLUGINNAME = wikimapia
 
-PY_FILES = wikimapia.py wikimapia_widget.py wikimapia_settings.py __init__.py
+PY_FILES = wikimapia.py \
+					 wikimapia_api.py \
+					 wikimapia_config.py \
+					 wikimapia_widget.py \
+					 wikimapia_settings.py \
+				   ui_wikimapia_widget.py \
+ 				   ui_wikimapia_settings.py \
+					 __init__.py
 
 EXTRAS = icon.png metadata.txt
 
-UI_FILES = ui_wikimapia.py ui_wikimapia_widget.py ui_wikimapia_settings.py
+UI_FILES = ui_wikimapia_widget.py \
+					 ui_wikimapia_settings.py
 
 RESOURCE_FILES = resources_rc.py
 

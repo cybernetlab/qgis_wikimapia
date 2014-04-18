@@ -44,7 +44,7 @@ class Wikimapia:
         self.plugin_dir = os.path.dirname(__file__)
 
         # initialize locale
-        locale = QSettings().value("locale/userLocale")[0:2]
+        locale = QSettings().value('locale/userLocale')[0:2]
         localePath = os.path.join(self.plugin_dir,
                                   'i18n',
                                   'wikimapia_{}.qm'.format(locale))
@@ -52,51 +52,48 @@ class Wikimapia:
         if os.path.exists(localePath):
             self.translator = QTranslator()
             self.translator.load(localePath)
-
             if qVersion() > '4.3.3':
                 QCoreApplication.installTranslator(self.translator)
 
-        self.config = WikimapiaConfig(self.plugin_dir, iface)
-
+        self.title = self.translator.translate('Wikimapia', '&Wikimapia')
         # Create the dialog (after translation) and keep reference
+        self.config = WikimapiaConfig(self.plugin_dir)
         self.widget = WikimapiaWidget(self.config)
         self.settings = WikimapiaSettings(self.config)
 
     def initGui(self):
         # Create action that will start plugin widget
-        self.action = QAction(
-            QIcon(":/plugins/wikimapia/icon.png"),
-            u"wikimapia", self.iface.mainWindow())
+        self.widget_action = QAction(
+            QIcon(":/plugins/wikimapia/icons/icon.png"),
+            self.translator.translate('Wikimapia', '&Widget'),
+            self.iface.mainWindow())
         self.settings_action = QAction(
-            QIcon(":/plugins/wikimapia/icon.png"),
-            u"settings", self.iface.mainWindow())
+            QIcon(":/plugins/wikimapia/icons/wikimapia-settings.png"),
+            self.translator.translate('Wikimapia', '&Settings'),
+            self.iface.mainWindow())
 
         # connect the action to the run method
-        self.action.triggered.connect(self.run)
+        self.widget_action.triggered.connect(self.run_widget)
         self.settings_action.triggered.connect(self.run_settings)
 
         # Add toolbar button and menu item
-        self.iface.addToolBarIcon(self.action)
-        self.iface.addPluginToMenu(u"&wikimapia", self.action)
-        self.iface.addPluginToMenu(u"&wikimapia", self.settings_action)
+        self.iface.addToolBarIcon(self.widget_action)
+        self.iface.addPluginToMenu(self.title, self.widget_action)
+        self.iface.addPluginToMenu(self.title, self.settings_action)
 
     def unload(self):
         # Remove the plugin menu item and icon
-        self.iface.removePluginMenu(u"&wikimapia", self.action)
-        self.iface.removePluginMenu(u"&wikimapia", self.settings_action)
-        #self.iface.removePluginMenu(u"&plandex", self.settings_action)
-        self.iface.removeToolBarIcon(self.action)
+        self.iface.removePluginMenu(self.title, self.widget_action)
+        self.iface.removePluginMenu(self.title, self.settings_action)
+        self.iface.removeToolBarIcon(self.widget_action)
 
     # run method that performs all the real work
-    def run(self):
-        if not self.config.complete():
+    def run_widget(self):
+        if not self.config.complete:
             if not self.run_settings(): return
         # show widget
-        self.addDockWidget(self.widget, Qt.LeftDockWidgetArea)
+        self.iface.addDockWidget(Qt.LeftDockWidgetArea, self.widget)
 
     def run_settings(self):
         self.settings.show()
         return self.settings.exec_()
-
-    def addDockWidget(self, wdg, position = None):
-        self.iface.addDockWidget(position, wdg)

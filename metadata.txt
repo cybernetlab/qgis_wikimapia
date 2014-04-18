@@ -12,7 +12,7 @@
 name=wikimapia
 qgisMinimumVersion=2.0
 description=wikimapia access
-version=0.1
+version=1.0
 author=Alexey Ovchinnikov
 email=alexiss@plandex.ru
 
@@ -29,7 +29,7 @@ tags=
 homepage=
 tracker=
 repository=
-icon=icon.png
+icon=icons/icon.png
 # experimental flag
 experimental=False
 

@@ -1,14 +1,15 @@
 import anydbm
 import os
+import qgis
 
 class WikimapiaConfig(object):
-    def __init__(self, plugin_dir, iface):
+    def __init__(self, plugin_dir):
         self._db_dir = os.path.join(plugin_dir, 'db')
         if not os.path.exists(self._db_dir): os.makedirs(self._db_dir)
         self._config = os.path.join(self._db_dir, 'config.db')
         self._plugin_dir = plugin_dir
         self._api = None
-        self._iface = iface
+        self._iface = None
         self.load()
 
     def load(self):
@@ -27,11 +28,13 @@ class WikimapiaConfig(object):
         db['categories_updated'] = str(self.categories_updated)
         db.close()
 
+    @property
     def complete(self):
         return self._api_key and self._categories_updated
 
     @property
     def iface(self):
+        if self._iface is None: self.iface = qgis.utils.iface()
         return self._iface
 
     @property

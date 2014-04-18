@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_wikimapia_widget.ui'
 #
-# Created: Sun Apr 13 20:57:33 2014
+# Created: Fri Apr 18 15:28:32 2014
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,6 +26,7 @@ except AttributeError:
 class Ui_WikimapiaWidget(object):
     def setupUi(self, WikimapiaWidget):
         WikimapiaWidget.setObjectName(_fromUtf8("WikimapiaWidget"))
+        WikimapiaWidget.resize(378, 200)
         WikimapiaWidget.setMinimumSize(QtCore.QSize(0, 200))
         WikimapiaWidget.setWindowTitle(_fromUtf8(""))
         self.horizontalLayout = QtGui.QHBoxLayout(WikimapiaWidget)
@@ -118,12 +119,12 @@ class Ui_WikimapiaWidget(object):
         QtCore.QMetaObject.connectSlotsByName(WikimapiaWidget)
 
     def retranslateUi(self, WikimapiaWidget):
-        self.boundsLabel.setText(_translate("WikimapiaWidget", "границы", None))
-        self.categoriesLabel.setText(_translate("WikimapiaWidget", "категории", None))
-        self.destLabel.setText(_translate("WikimapiaWidget", "назначение", None))
-        self.destCombo.setItemText(0, _translate("WikimapiaWidget", "На слой Wikimapia", None))
-        self.destCombo.setItemText(1, _translate("WikimapiaWidget", "На новый слой", None))
-        self.destCombo.setItemText(2, _translate("WikimapiaWidget", "В текущий слой", None))
+        self.boundsLabel.setText(_translate("WikimapiaWidget", "boundaries", None))
+        self.categoriesLabel.setText(_translate("WikimapiaWidget", "categories", None))
+        self.destLabel.setText(_translate("WikimapiaWidget", "target", None))
+        self.destCombo.setItemText(0, _translate("WikimapiaWidget", "Wikimapia layer", None))
+        self.destCombo.setItemText(1, _translate("WikimapiaWidget", "New temporary layer", None))
+        self.destCombo.setItemText(2, _translate("WikimapiaWidget", "Current layer", None))
         self.boundsButton.setText(_translate("WikimapiaWidget", "Select Location", None))
         self.importButton.setText(_translate("WikimapiaWidget", "Import", None))
         self.tabs.setTabText(self.tabs.indexOf(self.areaTab), _translate("WikimapiaWidget", "By Area", None))
