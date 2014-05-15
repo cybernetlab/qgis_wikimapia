@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.0" language="ru_RU" sourcelanguage="en">
+<!DOCTYPE TS><TS version="2.0" language="ru_RU" sourcelanguage="en">
 <context>
     <name>Wikimapia</name>
     <message>
@@ -9,12 +8,12 @@
         <translation>&amp;Wikimapia</translation>
     </message>
     <message>
-        <location filename="wikimapia.py" line="66"/>
+        <location filename="wikimapia.py" line="74"/>
         <source>&amp;Widget</source>
         <translation>&amp;Виджет</translation>
     </message>
     <message>
-        <location filename="wikimapia.py" line="70"/>
+        <location filename="wikimapia.py" line="78"/>
         <source>&amp;Settings</source>
         <translation>&amp;Настройки</translation>
     </message>
@@ -73,49 +72,64 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>WikimapiaWidget</name>
     <message>
-        <location filename="ui_wikimapia_widget.py" line="128"/>
+        <location filename="ui_wikimapia_widget.py" line="183"/>
         <source>Select Location</source>
         <translation>Выбор ограничивающей области</translation>
     </message>
     <message>
-        <location filename="ui_wikimapia_widget.py" line="129"/>
+        <location filename="ui_wikimapia_widget.py" line="192"/>
         <source>Import</source>
         <translation>Импорт</translation>
     </message>
     <message>
-        <location filename="ui_wikimapia_widget.py" line="130"/>
+        <location filename="ui_wikimapia_widget.py" line="185"/>
         <source>By Area</source>
         <translation>По области</translation>
     </message>
     <message>
-        <location filename="ui_wikimapia_widget.py" line="122"/>
+        <location filename="ui_wikimapia_widget.py" line="182"/>
         <source>boundaries</source>
         <translation>область запроса</translation>
     </message>
     <message>
-        <location filename="ui_wikimapia_widget.py" line="123"/>
+        <location filename="ui_wikimapia_widget.py" line="184"/>
         <source>categories</source>
         <translation>категории</translation>
     </message>
     <message>
-        <location filename="ui_wikimapia_widget.py" line="124"/>
+        <location filename="ui_wikimapia_widget.py" line="188"/>
         <source>target</source>
         <translation>назначение импорта</translation>
     </message>
     <message>
-        <location filename="ui_wikimapia_widget.py" line="125"/>
+        <location filename="ui_wikimapia_widget.py" line="189"/>
         <source>Wikimapia layer</source>
         <translation>Слой Wikimapia</translation>
     </message>
     <message>
-        <location filename="ui_wikimapia_widget.py" line="126"/>
+        <location filename="ui_wikimapia_widget.py" line="190"/>
         <source>New temporary layer</source>
         <translation>Новый слой</translation>
     </message>
     <message>
-        <location filename="ui_wikimapia_widget.py" line="127"/>
+        <location filename="ui_wikimapia_widget.py" line="191"/>
         <source>Current layer</source>
         <translation>Текущий слой</translation>
+    </message>
+    <message>
+        <location filename="ui_wikimapia_widget.py" line="186"/>
+        <source>id</source>
+        <translation>ID</translation>
+    </message>
+    <message>
+        <location filename="ui_wikimapia_widget.py" line="187"/>
+        <source>By ID</source>
+        <translation>По ID</translation>
+    </message>
+    <message>
+        <location filename="ui_wikimapia_widget.py" line="181"/>
+        <source>Wikimapia</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

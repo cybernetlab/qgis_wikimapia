@@ -58,8 +58,8 @@ class Wikimapia:
         self.title = self.translator.translate('Wikimapia', '&Wikimapia')
         # Create the dialog (after translation) and keep reference
         self.config = WikimapiaConfig(self.plugin_dir)
-        self.widget = WikimapiaWidget(self.config)
         self.settings = WikimapiaSettings(self.config)
+        self.widget = WikimapiaWidget(self.config)
 
     def initGui(self):
         # Create action that will start plugin widget

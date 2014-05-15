@@ -81,7 +81,7 @@ class WikimapiaApi(object):
             self.config = WikimapiaConfig(config)
         self.last_call = None
 
-    def get_place_by_id(self, id):
+    def get_place_by_id(self, id, opts = {}):
         if 'data_blocks' not in opts:
             opts['data_blocks'] = 'main,geometry,location'
         return self.request('place.getbyid', {'id': id})
