@@ -28,9 +28,10 @@ from datetime import datetime
 import os.path
 
 class WikimapiaSettings(QtGui.QDialog, Ui_WikimapiaSettings):
-    def __init__(self, config):
+    def __init__(self, app):
         QtGui.QDialog.__init__(self)
-        self.config = config
+        self.app = app
+        self.config = app.config
         self.setupUi(self)
         self.categoriesButton.clicked.connect(self.updateCategories)
 

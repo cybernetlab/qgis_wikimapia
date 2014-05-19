@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_wikimapia_widget.ui'
 #
-# Created: Thu May 15 13:16:27 2014
+# Created: Thu May 15 15:26:40 2014
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,7 +26,7 @@ except AttributeError:
 class Ui_WikimapiaWidget(object):
     def setupUi(self, WikimapiaWidget):
         WikimapiaWidget.setObjectName(_fromUtf8("WikimapiaWidget"))
-        WikimapiaWidget.resize(318, 231)
+        WikimapiaWidget.resize(318, 237)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -156,6 +156,13 @@ class Ui_WikimapiaWidget(object):
         self.destCombo.addItem(_fromUtf8(""))
         self.horizontalLayout.addWidget(self.destCombo)
         self.verticalLayout.addLayout(self.horizontalLayout)
+        self.progressBar = QtGui.QProgressBar(self.widgetContents)
+        self.progressBar.setEnabled(True)
+        self.progressBar.setMaximumSize(QtCore.QSize(16777215, 18))
+        self.progressBar.setProperty("value", 0)
+        self.progressBar.setInvertedAppearance(False)
+        self.progressBar.setObjectName(_fromUtf8("progressBar"))
+        self.verticalLayout.addWidget(self.progressBar)
         self.importLayout = QtGui.QHBoxLayout()
         self.importLayout.setObjectName(_fromUtf8("importLayout"))
         spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)

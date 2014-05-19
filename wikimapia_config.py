@@ -33,18 +33,6 @@ class WikimapiaConfig(object):
         return self._api_key and self._categories_updated
 
     @property
-    def iface(self):
-        if self._iface is None: self.iface = qgis.utils.iface()
-        return self._iface
-
-    @property
-    def api(self):
-        from wikimapia_api import WikimapiaApi
-        if not isinstance(self._api, WikimapiaApi):
-            self._api = WikimapiaApi(self)
-        return self._api
-
-    @property
     def db_dir(self):
         return self._db_dir
 

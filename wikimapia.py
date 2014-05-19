@@ -30,14 +30,11 @@ from qgis.gui import *
 import resources_rc
 import os.path
 
-from wikimapia_config import WikimapiaConfig
-from wikimapia_settings import WikimapiaSettings
-from wikimapia_widget import WikimapiaWidget
-
+from wikimapia_app import WikimapiaApp
 
 class Wikimapia:
     def __init__(self, iface):
-        # Save reference to the QGIS interface
+        # save reference to the QGIS interface
         self.iface = iface
 
         # initialize plugin directory
@@ -55,45 +52,11 @@ class Wikimapia:
             if qVersion() > '4.3.3':
                 QCoreApplication.installTranslator(self.translator)
 
-        self.title = self.translator.translate('Wikimapia', '&Wikimapia')
-        # Create the dialog (after translation) and keep reference
-        self.config = WikimapiaConfig(self.plugin_dir)
-        self.settings = WikimapiaSettings(self.config)
-        self.widget = WikimapiaWidget(self.config)
+        # run application
+        self.app = WikimapiaApp(self.plugin_dir)
 
     def initGui(self):
-        # Create action that will start plugin widget
-        self.widget_action = QAction(
-            QIcon(":/plugins/wikimapia/icons/icon.png"),
-            self.translator.translate('Wikimapia', '&Widget'),
-            self.iface.mainWindow())
-        self.settings_action = QAction(
-            QIcon(":/plugins/wikimapia/icons/wikimapia-settings.png"),
-            self.translator.translate('Wikimapia', '&Settings'),
-            self.iface.mainWindow())
-
-        # connect the action to the run method
-        self.widget_action.triggered.connect(self.run_widget)
-        self.settings_action.triggered.connect(self.run_settings)
-
-        # Add toolbar button and menu item
-        self.iface.addToolBarIcon(self.widget_action)
-        self.iface.addPluginToMenu(self.title, self.widget_action)
-        self.iface.addPluginToMenu(self.title, self.settings_action)
+        self.app.run()
 
     def unload(self):
-        # Remove the plugin menu item and icon
-        self.iface.removePluginMenu(self.title, self.widget_action)
-        self.iface.removePluginMenu(self.title, self.settings_action)
-        self.iface.removeToolBarIcon(self.widget_action)
-
-    # run method that performs all the real work
-    def run_widget(self):
-        if not self.config.complete:
-            if not self.run_settings(): return
-        # show widget
-        self.iface.addDockWidget(Qt.LeftDockWidgetArea, self.widget)
-
-    def run_settings(self):
-        self.settings.show()
-        return self.settings.exec_()
+        self.app.unload()
