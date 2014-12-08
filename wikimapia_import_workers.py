@@ -23,8 +23,9 @@ class WikimapiaWorker(QObject):
 class WikimapiaImportWorker(WikimapiaWorker):
     def __init__(self, app, layer, bounds = None):
         WikimapiaWorker.__init__(self, app)
-        self.layer = layer
-        self.provider = layer.dataProvider()
+        if layer and layer.isValid():
+            self.layer = layer
+            self.provider = layer.dataProvider()
         self.bounds = bounds
         self.processed = 0
         self.created = 0
@@ -47,8 +48,10 @@ class WikimapiaImportWorker(WikimapiaWorker):
         for p in place['polygon']:
             ring.append(QgsPoint(p['x'], p['y']))
         geometry = QgsGeometry.fromPolygon([ring])
+        center = geometry.centroid()
         if self.bounds:
-            if not self.bounds.geometry().contains(geometry): return False
+            if not any([x.contains(center) for x in self.bounds]):
+                return False
         feature = QgsFeature()
         feature.setGeometry(geometry)
         title = (place['title'] if 'title' in place else '')
@@ -67,6 +70,12 @@ class WikimapiaImportWorker(WikimapiaWorker):
 
 class WikimapiaImportByAreaWorker(WikimapiaImportWorker):
     def __init__(self, app, layer, bounds, bounds_layer, categories):
+        self.bounds_src = bounds
+        geom = bounds.geometryAndOwnership()
+        geometries = [f.geometryAndOwnership() for f in bounds_layer.getFeatures()
+                                               if f.id() != bounds.id()]
+        bounds = [g for g in geometries if geom.contains(g)]
+        if not bounds: bounds = [geom]
         WikimapiaImportWorker.__init__(self, app, layer, bounds)
         self.bounds_layer = bounds_layer
         self.wgs = QgsCoordinateReferenceSystem(4326)
@@ -75,17 +84,20 @@ class WikimapiaImportByAreaWorker(WikimapiaImportWorker):
 
     @pyqtSlot()
     def run(self, progressBar = None):
+        if not self.bounds_src: return
         self.progressBar = progressBar
         try:
-            rect = self.bounds.geometry().boundingBox()
-            p1 = self.crs.transform(QgsPoint(rect.xMinimum(), rect.yMinimum()))
-            p2 = self.crs.transform(QgsPoint(rect.xMaximum(), rect.yMaximum()))
-            places = self.app.api().get_place_by_area(
-                p1.x(), p1.y(), p2.x(), p2.y(),
-                { 'category': self.categories })
-            self.total = places.__len__()
+            self.total = 0
             self.started.emit(self.total)
-            self.createPlaces(places)
+            for geom in self.bounds:
+                rect = geom.boundingBox()
+                p1 = self.crs.transform(QgsPoint(rect.xMinimum(), rect.yMinimum()))
+                p2 = self.crs.transform(QgsPoint(rect.xMaximum(), rect.yMaximum()))
+                places = self.app.api().get_place_by_area(
+                    p1.x(), p1.y(), p2.x(), p2.y(),
+                    { 'category': self.categories })
+                self.total += places.__len__()
+                self.createPlaces(places)
         except Exception as e:
             self.finished.emit(False, self.created)
             self.error.emit(e, traceback.format_exc())

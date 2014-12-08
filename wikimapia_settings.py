@@ -37,7 +37,7 @@ class WikimapiaSettings(QtGui.QDialog, Ui_WikimapiaSettings):
 
     def show(self):
         self.progressBar.hide()
-        if self.config.complete(): self.firstStartText.hide()
+        if self.config.complete: self.firstStartText.hide()
         self.apiKeyEdit.setText(self.config.api_key)
         self.apiUrlEdit.setText(self.config.api_url)
         self.apiDelayEdit.setValue(self.config.api_delay)
@@ -72,7 +72,7 @@ class WikimapiaSettings(QtGui.QDialog, Ui_WikimapiaSettings):
         self.progressBar.setValue(0)
         db = anydbm.open(os.path.join(self.config.db_dir, 'categories.db'), 'c')
         db.clear()
-        categories = self.config.api.get_categories()
+        categories = self.app.api().get_categories()
         self.progressBar.setMaximum(len(categories))
         for cat in categories:
             db[str(cat['id'])] = cat['name'].encode('utf-8')
