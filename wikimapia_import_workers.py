@@ -44,6 +44,12 @@ class WikimapiaImportWorker(WikimapiaWorker):
 
     def createPlace(self, place, update = True):
         if 'polygon' not in place: return False
+
+        # check if feature with same wm_id is already in layer
+        for feature in self.layer.getFeatures():
+            if feature.attribute('wm_id') == place['id']:
+                return True
+
         ring = []
         for p in place['polygon']:
             ring.append(QgsPoint(p['x'], p['y']))
