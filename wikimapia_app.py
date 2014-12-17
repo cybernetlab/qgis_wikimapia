@@ -87,7 +87,12 @@ class WikimapiaApp(QObject):
                'filed=id:integer&'
                'field=wm_id:integer&'
                'field=name:string(100)&'
-               'field=description:string(5000)')
+               'field=description:string(5000)&'
+               'field=is_building:integer&'
+               'field=is_region:integer&'
+               'field=is_deleted:integer&'
+               'field=categories:string(255)&'
+               'field=tags:string(255)')
         name = 'temporary_wikimapia'
         if temporary is True:
             name += '_{:03d}'.format(self.memory_layer_index)

@@ -109,7 +109,7 @@ class WikimapiaApi(object):
         opts['key'] = self.config.api_key
         opts['function'] = function
         opts['format'] = 'json'
-        opts['language'] = 'ru'
+        opts['language'] = self.config.language
         params = urllib.urlencode(opts)
         uri = urlparse(self.config.api_url)
         conn = httplib.HTTPConnection(uri.netloc)

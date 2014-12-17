@@ -41,6 +41,7 @@ class WikimapiaSettings(QtGui.QDialog, Ui_WikimapiaSettings):
         self.apiKeyEdit.setText(self.config.api_key)
         self.apiUrlEdit.setText(self.config.api_url)
         self.apiDelayEdit.setValue(self.config.api_delay)
+        self.languageEdit.setText(self.config.language)
         if self.config.categories_updated:
             self.categoriesLabel.setText(
                 'updated at ' + str(self.config.categories_updated))
@@ -65,6 +66,7 @@ class WikimapiaSettings(QtGui.QDialog, Ui_WikimapiaSettings):
         self.config.api_key = self.apiKeyEdit.text()
         self.config.api_url = self.apiUrlEdit.text()
         self.config.api_delay = self.apiDelayEdit.value()
+        self.config.language = self.languageEdit.text()
         self.config.save()
 
     def updateCategories(self):

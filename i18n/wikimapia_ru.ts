@@ -22,12 +22,12 @@
 <context>
     <name>WikimapiaSettings</name>
     <message>
-        <location filename="ui_wikimapia_settings.py" line="96"/>
+        <location filename="ui_wikimapia_settings.py" line="102"/>
         <source>Wikimapia Plugin Settings</source>
         <translation>Настройки плагина Wikimapia</translation>
     </message>
     <message>
-        <location filename="ui_wikimapia_settings.py" line="97"/>
+        <location filename="ui_wikimapia_settings.py" line="103"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -40,34 +40,39 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Похоже, что плагин запускается впервые. Зполните ниже ключ и адрес wikimapia API и нажмите &amp;laquo;Загрузить категории&amp;raquo; для загрузки категорий с wikimapia.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="ui_wikimapia_settings.py" line="102"/>
+        <location filename="ui_wikimapia_settings.py" line="108"/>
         <source>api key</source>
         <translation>ключ API</translation>
     </message>
     <message>
-        <location filename="ui_wikimapia_settings.py" line="103"/>
+        <location filename="ui_wikimapia_settings.py" line="109"/>
         <source>api url</source>
         <translation>адрес (url) API</translation>
     </message>
     <message>
-        <location filename="ui_wikimapia_settings.py" line="104"/>
+        <location filename="ui_wikimapia_settings.py" line="110"/>
         <source>api delay (msec)</source>
         <translation>задержка между запросами API (мс)</translation>
     </message>
     <message>
-        <location filename="ui_wikimapia_settings.py" line="105"/>
+        <location filename="ui_wikimapia_settings.py" line="111"/>
         <source>categories</source>
         <translation>категории</translation>
     </message>
     <message>
-        <location filename="ui_wikimapia_settings.py" line="106"/>
+        <location filename="ui_wikimapia_settings.py" line="112"/>
         <source>updated at</source>
         <translation>обновлено</translation>
     </message>
     <message>
-        <location filename="ui_wikimapia_settings.py" line="107"/>
+        <location filename="ui_wikimapia_settings.py" line="113"/>
         <source>Update now</source>
         <translation>Обновить сейчас</translation>
+    </message>
+    <message>
+        <location filename="ui_wikimapia_settings.py" line="114"/>
+        <source>language</source>
+        <translation>язык</translation>
     </message>
 </context>
 <context>
@@ -133,14 +138,24 @@ p, li { white-space: pre-wrap; }
         <translation>Wikimapia</translation>
     </message>
     <message>
-        <location filename="wikimapia_widget.py" line="137"/>
+        <location filename="wikimapia_widget.py" line="168"/>
         <source>import successfull</source>
         <translation>импорт завершён</translation>
     </message>
     <message>
-        <location filename="wikimapia_widget.py" line="137"/>
+        <location filename="wikimapia_widget.py" line="168"/>
         <source>{0} features imported successfully</source>
         <translation>{0} объектов успешно импортировано</translation>
+    </message>
+    <message>
+        <location filename="wikimapia_widget.py" line="120"/>
+        <source>Importing from Wikimapia</source>
+        <translation>Импорт из Wikimapia</translation>
+    </message>
+    <message>
+        <location filename="wikimapia_widget.py" line="177"/>
+        <source>error occured while importing</source>
+        <translation>ошибка в процессе импорта</translation>
     </message>
 </context>
 </TS>

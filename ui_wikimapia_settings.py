@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'ui_wikimapia_settings.ui'
 #
-# Created: Fri Apr 18 15:20:15 2014
-#      by: PyQt4 UI code generator 4.10.3
+# Created: Tue Dec 16 19:20:39 2014
+#      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -26,7 +26,7 @@ except AttributeError:
 class Ui_WikimapiaSettings(object):
     def setupUi(self, WikimapiaSettings):
         WikimapiaSettings.setObjectName(_fromUtf8("WikimapiaSettings"))
-        WikimapiaSettings.resize(400, 290)
+        WikimapiaSettings.resize(400, 327)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/plugins/wikimapia/icons/wikimapia-settings.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         WikimapiaSettings.setWindowIcon(icon)
@@ -65,7 +65,7 @@ class Ui_WikimapiaSettings(object):
         self.formLayout.setWidget(2, QtGui.QFormLayout.FieldRole, self.apiDelayEdit)
         self.categoriesUpdatedLabel = QtGui.QLabel(WikimapiaSettings)
         self.categoriesUpdatedLabel.setObjectName(_fromUtf8("categoriesUpdatedLabel"))
-        self.formLayout.setWidget(3, QtGui.QFormLayout.LabelRole, self.categoriesUpdatedLabel)
+        self.formLayout.setWidget(4, QtGui.QFormLayout.LabelRole, self.categoriesUpdatedLabel)
         self.horizontalLayout = QtGui.QHBoxLayout()
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
         self.categoriesLabel = QtGui.QLabel(WikimapiaSettings)
@@ -74,7 +74,13 @@ class Ui_WikimapiaSettings(object):
         self.categoriesButton = QtGui.QPushButton(WikimapiaSettings)
         self.categoriesButton.setObjectName(_fromUtf8("categoriesButton"))
         self.horizontalLayout.addWidget(self.categoriesButton)
-        self.formLayout.setLayout(3, QtGui.QFormLayout.FieldRole, self.horizontalLayout)
+        self.formLayout.setLayout(4, QtGui.QFormLayout.FieldRole, self.horizontalLayout)
+        self.languageLabel = QtGui.QLabel(WikimapiaSettings)
+        self.languageLabel.setObjectName(_fromUtf8("languageLabel"))
+        self.formLayout.setWidget(3, QtGui.QFormLayout.LabelRole, self.languageLabel)
+        self.languageEdit = QtGui.QLineEdit(WikimapiaSettings)
+        self.languageEdit.setObjectName(_fromUtf8("languageEdit"))
+        self.formLayout.setWidget(3, QtGui.QFormLayout.FieldRole, self.languageEdit)
         self.verticalLayout.addLayout(self.formLayout)
         self.progressBar = QtGui.QProgressBar(WikimapiaSettings)
         self.progressBar.setEnabled(True)
@@ -105,5 +111,6 @@ class Ui_WikimapiaSettings(object):
         self.categoriesUpdatedLabel.setText(_translate("WikimapiaSettings", "categories", None))
         self.categoriesLabel.setText(_translate("WikimapiaSettings", "updated at", None))
         self.categoriesButton.setText(_translate("WikimapiaSettings", "Update now", None))
+        self.languageLabel.setText(_translate("WikimapiaSettings", "language", None))
 
 import resources_rc

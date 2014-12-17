@@ -103,8 +103,9 @@ class WikimapiaWidget(QDockWidget, Ui_WikimapiaWidget):
         if current == self.idTab:
             enabled = self.idEdit.value() > 0
         elif current == self.areaTab:
-            enabled = self.bounds is not None and \
-                      self.categoriesEdit.text() != ''
+            enabled = True
+            #enabled = self.bounds is not None and \
+            #          self.categoriesEdit.text() != ''
         self.importButton.setEnabled(enabled)
 
     def loadCategoryCombo(self):
@@ -136,11 +137,13 @@ class WikimapiaWidget(QDockWidget, Ui_WikimapiaWidget):
                 self.createLayer(),
                 self.idEdit.value())
         elif current == self.areaTab:
+            layer = self.iface.activeLayer()
             worker = WikimapiaImportByAreaWorker(
                 self.app,
                 self.createLayer(),
-                self.bounds,
-                self.boundsLayer,
+                layer,
+                #self.bounds,
+                #self.boundsLayer,
                 self.categoriesEdit.text())
         if worker is None: return
         self.createProgress()

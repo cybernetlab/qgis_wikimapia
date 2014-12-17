@@ -17,6 +17,7 @@ class WikimapiaConfig(object):
         self._api_key = db.setdefault('api_key', '')
         self._api_url = db.setdefault('api_url', 'http://api.wikimapia.org/')
         self._api_delay = int(db.setdefault('api_delay', '1'))
+        self._language = db.setdefault('language', 'en')
         self._categories_updated = str(db.setdefault('categories_updated', ''))
         db.close()
 
@@ -25,6 +26,7 @@ class WikimapiaConfig(object):
         db['api_key'] = self.api_key
         db['api_url'] = self.api_url
         db['api_delay'] = str(self.api_delay)
+        db['language'] = str(self.language)
         db['categories_updated'] = str(self.categories_updated)
         db.close()
 
@@ -54,6 +56,13 @@ class WikimapiaConfig(object):
     @api_url.setter
     def api_url(self, value):
         self._api_url = value
+
+    @property
+    def language(self):
+        return self._language
+    @language.setter
+    def language(self, value):
+        self._language = value
 
     @property
     def api_delay(self):
