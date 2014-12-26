@@ -38,7 +38,7 @@ class WikimapiaImportWorker(WikimapiaWorker):
         self.processed = self.processed + 1
         if self.total == 0: return
         percentsNew = (self.processed * 100) / self.total
-        if percentsNew > self.percents:
+        if percentsNew != self.percents:
             self.percents = percentsNew
             self.progress.emit(self.percents)
             if hasattr(self, 'progressBar') and self.progressBar:
