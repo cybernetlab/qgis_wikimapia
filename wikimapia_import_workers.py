@@ -123,10 +123,12 @@ class WikimapiaImportByAreaWorker(WikimapiaImportWorker):
         p2 = QgsPoint(x2 + dx, y2 + dy)
         result = []
         while p1.x() < rect.xMaximum() and p1.y() < rect.yMaximum():
-            reshaped, splitted, points = geom.splitGeometry([p1, p2], True) 
+            reshaped, splitted, points = geom.splitGeometry([p1, p2], True)
             if reshaped != 0: break
             result.append(geom)
-            geom = splitted[0]
+            geom = splitted.pop(0)
+            for g in splitted:
+                result += self.splitGeom(g, g.boundingBox(), dx, dy)
             p1.set(p1.x() + dx, p1.y() + dy)
             p2.set(p2.x() + dx, p2.y() + dy)
         if geom: result.append(geom)

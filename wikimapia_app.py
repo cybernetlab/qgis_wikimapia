@@ -74,9 +74,9 @@ class WikimapiaApp(QObject):
         self.iface.removePluginMenu(self.title, self.widget_action)
         self.iface.removePluginMenu(self.title, self.settings_action)
         if self.widget: self.iface.removeDockWidget(self.widget)
-        if self.memory_layer is not None and self.memory_layer.isValid():
-            self.layers.append(self.memory_layer.id())
-        QgsMapLayerRegistry.instance().removeMapLayers(self.layers)
+        #if self.memory_layer is not None and self.memory_layer.isValid():
+        #    self.layers.append(self.memory_layer.id())
+        #QgsMapLayerRegistry.instance().removeMapLayers(self.layers)
         self.finished.emit()
 
     def retrieveLayer(self, temporary = False):
