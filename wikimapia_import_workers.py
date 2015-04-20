@@ -3,6 +3,14 @@ from qgis.core import *
 import traceback
 import math
 
+from wikimapia_api import API
+
+def apply_config(config):
+    API.config.key = config.api_key
+    API.config.url = config.api_url
+    API.config.delay = config.api_delay
+    API.config.language = config.language
+
 class WikimapiaWorker(QObject):
     started = pyqtSignal(int)
     finished = pyqtSignal(bool, int)
@@ -198,7 +206,8 @@ class WikimapiaImportByIdWorker(WikimapiaImportWorker):
         self.progressBar = progressBar
         self.started.emit(1)
         try:
-            place = self.app.api().get_place_by_id(self.id)
+            apply_config(self.app.config)
+            place = API.places[self.id]
             self.createPlace(place)
         except Exception as e:
             self.finished.emit(False, 0)
