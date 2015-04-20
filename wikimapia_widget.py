@@ -42,25 +42,19 @@ class WikimapiaWidget(QDockWidget, Ui_WikimapiaWidget):
         self.config = app.config
         self.iface = app.iface
         self.setupUi(self)
-        # a reference to our map canvas
-        self.canvas = self.iface.mapCanvas() #CHANGE
-        self.pointEmitter = QgsMapToolEmitPoint(self.iface.mapCanvas())
-        self.boundsButton.toggled.connect(self.activateTool)
+        self.layers = QgsMapLayerRegistry.instance()
+        #self.layers.legendLayersAdded.connect(self.loadBoundsCombo)
+        #self.layers.layersRemoved.connect(self.loadBoundsCombo)
+        self.refreshBoundsButton.clicked.connect(self.loadBoundsCombo)
+        self.boundsCombo.currentIndexChanged.connect(self.boundsChanged)
         self.categoriesEdit.editingFinished.connect(self.categoriesChanged)
         self.importButton.clicked.connect(self.doImport)
         self.tabs.currentChanged.connect(self.updateImportButton)
         self.idEdit.valueChanged.connect(self.idChanged)
-        self.bounds = None
-        self.boundsLayer = None
+        self.loadBoundsCombo()
 
-    def activateTool(self, state):
-        # self.iface.messageBar().pushMessage('info', str(state))
-        if state:
-            self.pointEmitter.canvasClicked.connect(self.selectFeature)
-            self.canvas.setMapTool(self.pointEmitter)
-        else:
-            self.pointEmitter.canvasClicked.disconnect(self.selectFeature)
-            self.canvas.unsetMapTool(self.pointEmitter)
+    def boundsChanged(self):
+        self.updateImportButton()
 
     def categoriesChanged(self):
         self.updateImportButton()
@@ -68,52 +62,22 @@ class WikimapiaWidget(QDockWidget, Ui_WikimapiaWidget):
     def idChanged(self):
         self.updateImportButton()
 
-    def selectFeature(self, point, button):
-        #self.iface.messageBar().pushMessage('info', str(point))
-        layer = self.iface.activeLayer()
-        if not layer or layer.type() != QgsMapLayer.VectorLayer:
-            self.iface.messageBar().pushMessage(
-                'Error',
-                'You should use `selectTool` only with active vector layer',
-                level = QgsMessageBar.WARNING,
-                duration = 3)
-            return
-        width = self.canvas.mapUnitsPerPixel() * 2
-        rect = QgsRectangle(point.x() - width,
-                            point.y() - width,
-                            point.x() + width,
-                            point.y() + width)
-
-        rect = self.canvas.mapRenderer().mapToLayerCoordinates(layer, rect)
-
-        layer.select(rect, False)
-        selected = layer.selectedFeatures()
-        if selected:
-            self.bounds = selected[0]
-            layer.removeSelection()
-            layer.select(self.bounds.id())
-            self.boundsButton.toggle()
-            self.boundsEdit.setText(str(self.bounds.id()))
-            self.boundsLayer = layer
-            self.updateImportButton()
-
     def updateImportButton(self):
         enabled = False
         current = self.tabs.currentWidget()
         if current == self.idTab:
             enabled = self.idEdit.value() > 0
         elif current == self.areaTab:
-            enabled = True
-            #enabled = self.bounds is not None and \
-            #          self.categoriesEdit.text() != ''
+            enabled = self.boundsCombo.currentIndex >= 0
         self.importButton.setEnabled(enabled)
 
-    def loadCategoryCombo(self):
-        #if self.categoryCombo.count() > 0: return
-        db = anydbm.open(os.path.join(self.config.db_dir, 'categories.db'), 'c')
-        for id, val in db.iteritems():
-            self.categoryCombo.addItem(val.decode('utf-8') + ' (id: ' + id + ')', id)
-        db.close()
+    def loadBoundsCombo(self):
+        layers = self.iface.legendInterface().layers()
+        self.boundsCombo.clear()
+        for layer in layers:
+            layerType = layer.type()
+            if layerType == QgsMapLayer.VectorLayer:
+                self.boundsCombo.addItem(layer.name(), layer.id())
 
     def createProgress(self):
         # configure the QgsMessageBar
@@ -124,6 +88,10 @@ class WikimapiaWidget(QDockWidget, Ui_WikimapiaWidget):
         self.messageBar.layout().addWidget(self.progressBar)
         self.iface.messageBar().pushWidget(
             self.messageBar, self.iface.messageBar().INFO)
+
+    def createBoundsLayer(self):
+        self.bounds = QgsVectorLayer('polygon?crs=epsg:4326', 'bounds', 'memory')
+        QgsMapLayerRegistry.instance().addMapLayer(self.bounds)
 
     def hideProgress(self):
         if self.messageBar: self.iface.messageBar().popWidget(self.messageBar)
@@ -137,21 +105,22 @@ class WikimapiaWidget(QDockWidget, Ui_WikimapiaWidget):
                 self.createLayer(),
                 self.idEdit.value())
         elif current == self.areaTab:
-            layer = self.iface.activeLayer()
+            index = self.boundsCombo.currentIndex()
+            bounds = self.layers.mapLayer(self.boundsCombo.itemData(index))
             worker = WikimapiaImportByAreaWorker(
                 self.app,
                 self.createLayer(),
-                layer,
-                #self.bounds,
-                #self.boundsLayer,
+                bounds,
                 self.categoriesEdit.text())
         if worker is None: return
         self.createProgress()
+        self.percents = 0
         self.setEnabled(False)
 
-        worker.finished.connect(self.importFinished)
-        worker.error.connect(self.importError)
-        worker.run(self.progressBar)
+        self.createBoundsLayer()
+        #worker.finished.connect(self.importFinished)
+        #worker.error.connect(self.importError)
+        #worker.run(self.progressBar)
         #self.importFinished(True, )
         #self.thread = thread = QThread(QThread.currentThread()) #self.iface.mainWindow())
         #worker.moveToThread(thread)
@@ -160,18 +129,28 @@ class WikimapiaWidget(QDockWidget, Ui_WikimapiaWidget):
         # self.iface.mainWindow().processEvents()
         #thread.start()
         #QgsApplication.processEvents()
+        thread = QThread(self)
+        worker.moveToThread(thread)
+        worker.finished.connect(self.importFinished)
+        worker.error.connect(self.importError)
+        worker.progress.connect(self.importProgress)
+        thread.started.connect(worker.run)
+        thread.start()
+        self.thread = thread
+        self.worker = worker
+
 
     def importFinished(self, success, total):
-        #self.worker.deleteLater()
-        #self.thread.quit()
-        #self.thread.wait()
-        #self.thread.deleteLater()
+        self.worker.deleteLater()
+        self.thread.quit()
+        self.thread.wait()
+        self.thread.deleteLater()
         if success:
             self.iface.messageBar().pushMessage(
                 self.tr('import successfull'),
                 self.tr('{0} features imported successfully').format(total),
                 duration = 3)
-        if self.boundsLayer: self.boundsLayer.removeSelection()
+        #if self.boundsLayer: self.boundsLayer.removeSelection()
         self.setEnabled(True)
         self.hideProgress()
 
@@ -180,6 +159,15 @@ class WikimapiaWidget(QDockWidget, Ui_WikimapiaWidget):
             self.tr('error occured while importing'),
             msg,
             level = QgsMessageBar.CRITICAL)
+
+    def importProgress(self, total, progress, items, geom):
+        percentsNew = (progress * 100) / total
+        if percentsNew != self.percents:
+            self.percents = percentsNew
+            self.progressBar.setValue(self.percents)
+        f = QgsFeature()
+        f.setGeometry(geom)
+        self.bounds.dataProvider().addFeatures([f])
 
     def createLayer(self):
         selectedIndex = self.destCombo.currentIndex()

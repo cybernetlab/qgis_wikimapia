@@ -7,7 +7,7 @@ class WikimapiaWorker(QObject):
     started = pyqtSignal(int)
     finished = pyqtSignal(bool, int)
     error = pyqtSignal(Exception, basestring)
-    progress = pyqtSignal(int)
+    progress = pyqtSignal(int, int, int, QgsGeometry)
 
     def __init__(self, app):
         QObject.__init__(self, None)
@@ -40,7 +40,7 @@ class WikimapiaImportWorker(WikimapiaWorker):
         percentsNew = (self.processed * 100) / self.total
         if percentsNew != self.percents:
             self.percents = percentsNew
-            self.progress.emit(self.percents)
+            #self.progress.emit(self.percents)
             if hasattr(self, 'progressBar') and self.progressBar:
                 self.progressBar.setValue(self.percents)
 
@@ -147,12 +147,12 @@ class WikimapiaImportByAreaWorker(WikimapiaImportWorker):
                     bounds += self.splitGeom(g, r, self.SPLIT_SIZE, 0)
             bad = [g for g in bounds if not self.wellBoundary(g)]
 
-        #target = QgsVectorLayer('polygon?crs=epsg:4326', 'test', 'memory')
-        #for geom in bounds:
-        #    f = QgsFeature()
-        #    f.setGeometry(geom)
-        #    target.dataProvider().addFeatures([f])
-        #QgsMapLayerRegistry.instance().addMapLayer(target)
+        target = QgsVectorLayer('polygon?crs=epsg:4326', 'test', 'memory')
+        for geom in bounds:
+            f = QgsFeature()
+            f.setGeometry(geom)
+            target.dataProvider().addFeatures([f])
+        QgsMapLayerRegistry.instance().addMapLayer(target)
 
     @pyqtSlot()
     def run(self, progressBar = None):
@@ -162,7 +162,9 @@ class WikimapiaImportByAreaWorker(WikimapiaImportWorker):
         self.progressBar = progressBar
         try:
             self.total = 0
-            self.started.emit(self.total)
+            totalBounds = len(self.bounds)
+            self.started.emit(totalBounds)
+            progress = 0
             for geom in self.bounds:
                 #f = QgsFeature()
                 #f.setGeometry(geom)
@@ -176,6 +178,8 @@ class WikimapiaImportByAreaWorker(WikimapiaImportWorker):
                     { 'category': self.categories })
                 self.total += places.__len__()
                 self.createPlaces(places, geom)
+                progress += 1
+                self.progress.emit(totalBounds, progress, places.__len__(), geom)
 
             #QgsMapLayerRegistry.instance().addMapLayer(target)
         except Exception as e:
@@ -201,5 +205,4 @@ class WikimapiaImportByIdWorker(WikimapiaImportWorker):
             self.error.emit(e, traceback.format_exc())
             return
         self.finished.emit(True, 1)
-
 

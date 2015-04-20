@@ -80,82 +80,87 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="ui_wikimapia_widget.py" line="192"/>
         <source>Select Location</source>
-        <translation>Выбор ограничивающей области</translation>
+        <translation type="obsolete">Выбор ограничивающей области</translation>
     </message>
     <message>
-        <location filename="ui_wikimapia_widget.py" line="201"/>
+        <location filename="ui_wikimapia_widget.py" line="186"/>
         <source>Import</source>
         <translation>Импорт</translation>
     </message>
     <message>
-        <location filename="ui_wikimapia_widget.py" line="194"/>
+        <location filename="ui_wikimapia_widget.py" line="179"/>
         <source>By Area</source>
         <translation>По области</translation>
     </message>
     <message>
-        <location filename="ui_wikimapia_widget.py" line="191"/>
+        <location filename="ui_wikimapia_widget.py" line="176"/>
         <source>boundaries</source>
         <translation>область запроса</translation>
     </message>
     <message>
-        <location filename="ui_wikimapia_widget.py" line="193"/>
+        <location filename="ui_wikimapia_widget.py" line="177"/>
         <source>categories</source>
         <translation>категории</translation>
     </message>
     <message>
-        <location filename="ui_wikimapia_widget.py" line="197"/>
+        <location filename="ui_wikimapia_widget.py" line="182"/>
         <source>target</source>
         <translation>назначение импорта</translation>
     </message>
     <message>
-        <location filename="ui_wikimapia_widget.py" line="198"/>
+        <location filename="ui_wikimapia_widget.py" line="183"/>
         <source>Wikimapia layer</source>
         <translation>Слой Wikimapia</translation>
     </message>
     <message>
-        <location filename="ui_wikimapia_widget.py" line="199"/>
+        <location filename="ui_wikimapia_widget.py" line="184"/>
         <source>New temporary layer</source>
         <translation>Новый слой</translation>
     </message>
     <message>
-        <location filename="ui_wikimapia_widget.py" line="200"/>
+        <location filename="ui_wikimapia_widget.py" line="185"/>
         <source>Current layer</source>
         <translation>Текущий слой</translation>
     </message>
     <message>
-        <location filename="ui_wikimapia_widget.py" line="195"/>
+        <location filename="ui_wikimapia_widget.py" line="180"/>
         <source>id</source>
         <translation>ID</translation>
     </message>
     <message>
-        <location filename="ui_wikimapia_widget.py" line="196"/>
+        <location filename="ui_wikimapia_widget.py" line="181"/>
         <source>By ID</source>
         <translation>По ID</translation>
     </message>
     <message>
-        <location filename="ui_wikimapia_widget.py" line="190"/>
+        <location filename="ui_wikimapia_widget.py" line="175"/>
         <source>Wikimapia</source>
         <translation>Wikimapia</translation>
     </message>
     <message>
-        <location filename="wikimapia_widget.py" line="168"/>
+        <location filename="wikimapia_widget.py" line="183"/>
         <source>import successfull</source>
         <translation>импорт завершён</translation>
     </message>
     <message>
-        <location filename="wikimapia_widget.py" line="168"/>
+        <location filename="wikimapia_widget.py" line="183"/>
         <source>{0} features imported successfully</source>
         <translation>{0} объектов успешно импортировано</translation>
     </message>
     <message>
-        <location filename="wikimapia_widget.py" line="120"/>
+        <location filename="wikimapia_widget.py" line="134"/>
         <source>Importing from Wikimapia</source>
         <translation>Импорт из Wikimapia</translation>
     </message>
     <message>
-        <location filename="wikimapia_widget.py" line="177"/>
+        <location filename="wikimapia_widget.py" line="192"/>
         <source>error occured while importing</source>
         <translation>ошибка в процессе импорта</translation>
+    </message>
+    <message>
+        <location filename="ui_wikimapia_widget.py" line="178"/>
+        <source>selected objects only</source>
+        <translation>только выделенные полигоны</translation>
     </message>
 </context>
 </TS>

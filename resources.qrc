@@ -2,5 +2,6 @@
   <qresource prefix="/plugins/wikimapia" >
     <file>icons/icon.png</file>
     <file>icons/wikimapia-settings.png</file>
+    <file>icons/refresh.png</file>
   </qresource>
 </RCC>
