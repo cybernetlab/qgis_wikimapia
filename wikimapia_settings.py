@@ -27,6 +27,8 @@ import anydbm
 from datetime import datetime
 import os.path
 
+from wikimapia_api import API
+
 class WikimapiaSettings(QtGui.QDialog, Ui_WikimapiaSettings):
     def __init__(self, app):
         QtGui.QDialog.__init__(self)
@@ -74,7 +76,8 @@ class WikimapiaSettings(QtGui.QDialog, Ui_WikimapiaSettings):
         self.progressBar.setValue(0)
         db = anydbm.open(os.path.join(self.config.db_dir, 'categories.db'), 'c')
         db.clear()
-        categories = self.app.api().get_categories()
+        self.config.configure_api()
+        categories = API.categories.all()
         self.progressBar.setMaximum(len(categories))
         for cat in categories:
             db[str(cat['id'])] = cat['name'].encode('utf-8')

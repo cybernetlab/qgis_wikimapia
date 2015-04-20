@@ -39,7 +39,6 @@ TRANSLATIONS = i18n/wikimapia_ru.ts
 PLUGINNAME = wikimapia
 
 PY_FILES = wikimapia.py \
-					 wikimapia_api.py \
 					 wikimapia_config.py \
 					 wikimapia_widget.py \
 					 wikimapia_settings.py \

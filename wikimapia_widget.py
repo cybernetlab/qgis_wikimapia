@@ -89,10 +89,6 @@ class WikimapiaWidget(QDockWidget, Ui_WikimapiaWidget):
         self.iface.messageBar().pushWidget(
             self.messageBar, self.iface.messageBar().INFO)
 
-    def createBoundsLayer(self):
-        self.bounds = QgsVectorLayer('polygon?crs=epsg:4326', 'bounds', 'memory')
-        QgsMapLayerRegistry.instance().addMapLayer(self.bounds)
-
     def hideProgress(self):
         if self.messageBar: self.iface.messageBar().popWidget(self.messageBar)
 
@@ -117,7 +113,7 @@ class WikimapiaWidget(QDockWidget, Ui_WikimapiaWidget):
         self.percents = 0
         self.setEnabled(False)
 
-        self.createBoundsLayer()
+        #self.createBoundsLayer()
         #worker.finished.connect(self.importFinished)
         #worker.error.connect(self.importError)
         #worker.run(self.progressBar)
@@ -138,7 +134,6 @@ class WikimapiaWidget(QDockWidget, Ui_WikimapiaWidget):
         thread.start()
         self.thread = thread
         self.worker = worker
-
 
     def importFinished(self, success, total):
         self.worker.deleteLater()

@@ -2,13 +2,14 @@ import anydbm
 import os
 import qgis
 
+from wikimapia_api import API
+
 class WikimapiaConfig(object):
     def __init__(self, plugin_dir):
         self._db_dir = os.path.join(plugin_dir, 'db')
         if not os.path.exists(self._db_dir): os.makedirs(self._db_dir)
         self._config = os.path.join(self._db_dir, 'config.db')
         self._plugin_dir = plugin_dir
-        self._api = None
         self._iface = None
         self.load()
 
@@ -79,3 +80,8 @@ class WikimapiaConfig(object):
     def categories_updated(self, value):
         self._categories_updated = value
 
+    def configure_api(self):
+        API.config.key = self.api_key
+        API.config.url = self.api_url
+        API.config.delay = self.api_delay
+        API.config.language = self.language

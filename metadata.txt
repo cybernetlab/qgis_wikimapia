@@ -10,9 +10,9 @@
 
 [general]
 name=wikimapia
-qgisMinimumVersion=2.0
+qgisMinimumVersion=2.4
 description=wikimapia access
-version=1.0
+version=2.0
 author=Alexey Ovchinnikov
 email=alexiss@plandex.ru
 

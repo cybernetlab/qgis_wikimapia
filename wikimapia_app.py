@@ -14,8 +14,6 @@ class WikimapiaApp(QObject):
     finished = pyqtSignal()
 
     def __init__(self, plugin_dir):
-        # init properties
-        self._api = None
         # init config
         self.config = WikimapiaConfig(plugin_dir)
         self.iface = qgis.utils.iface
@@ -29,12 +27,6 @@ class WikimapiaApp(QObject):
         # init GUI controls
         self.settings = WikimapiaSettings(self)
         self.widget = WikimapiaWidget(self)
-
-    def api(self):
-        from wikimapia_api import WikimapiaApi
-        if not isinstance(self._api, WikimapiaApi):
-            self._api = WikimapiaApi(self.config)
-        return self._api
 
     def run(self):
         # Create action that will start plugin widget

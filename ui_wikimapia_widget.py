@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_wikimapia_widget.ui'
 #
-# Created: Tue Apr 14 18:00:43 2015
+# Created: Mon Apr 20 16:51:39 2015
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
