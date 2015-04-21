@@ -1,6 +1,7 @@
 import anydbm
 import os
 import qgis
+import tempfile
 
 from wikimapia_api import API
 
@@ -81,6 +82,15 @@ class WikimapiaConfig(object):
         self._categories_updated = value
 
     def configure_api(self):
+        log = os.path.join(tempfile.gettempdir(), 'wiki-test.log')
+        # remove log file if it exists
+        try:
+            os.remove(log)
+        except OSError:
+            pass
+        # configure API
+        API.config.log_level = 'info'
+        API.config.log = log
         API.config.key = self.api_key
         API.config.url = self.api_url
         API.config.delay = self.api_delay

@@ -73,8 +73,10 @@ class WikimapiaApp(QObject):
 
     def retrieveLayer(self, temporary = False):
         layer = None
-        if temporary is False: layer = self.memory_layer
-        if layer is not None: return layer
+        if temporary is False:
+            layer = self.memory_layer
+        if layer is not None:
+            return layer
         uri = ('Polygon?crs=epsg:4326&'
                'filed=id:integer&'
                'field=wm_id:integer&'
@@ -97,7 +99,8 @@ class WikimapiaApp(QObject):
                 level = QgsMessageBar.CRITICAL,
                 duration = 3)
 
-        for symbol in layer.rendererV2().symbols(): symbol.setAlpha(0.5)
+        for symbol in layer.rendererV2().symbols():
+            symbol.setAlpha(0.5)
         QgsMapLayerRegistry.instance().addMapLayer(layer)
 
         if temporary is True:

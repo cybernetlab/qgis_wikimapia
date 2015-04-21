@@ -9,7 +9,7 @@ class WikimapiaWorker(QObject):
     started = pyqtSignal(int)
     finished = pyqtSignal(bool, int)
     error = pyqtSignal(Exception, basestring)
-    progress = pyqtSignal(int, int, int, QgsGeometry)
+    progress = pyqtSignal(int)
 
     def __init__(self, app):
         QObject.__init__(self, None)
@@ -37,13 +37,13 @@ class WikimapiaImportWorker(WikimapiaWorker):
         self.ids = []
 
     def next(self):
-        self.processed = self.processed + 1
+        self.processed += 1
         if self.total == 0:
             return
         percentsNew = (self.processed * 100) / self.total
         if percentsNew != self.percents:
             self.percents = percentsNew
-            #self.progress.emit(self.percents)
+            self.progress.emit(self.percents)
             if hasattr(self, 'progressBar') and self.progressBar:
                 self.progressBar.setValue(self.percents)
 
@@ -89,8 +89,10 @@ class WikimapiaImportWorker(WikimapiaWorker):
 
     def createPlaces(self, places, bounds):
         for place in places:
-            if self.abort is True: break
-            if self.createPlace(place, bounds, False) is True: self.created += 1
+            if self.abort is True:
+                break
+            if self.createPlace(place, bounds, False) is True:
+                self.created += 1
             self.next()
         self.layer.updateExtents()
 
@@ -116,20 +118,18 @@ class WikimapiaImportByAreaWorker(WikimapiaImportWorker):
         self.progressBar = progressBar
         try:
             self.total = 0
-            totalBounds = len(self.bounds)
-            self.started.emit(totalBounds)
-            progress = 0
+            self.started.emit(0)
             self.app.config.configure_api()
             for geom in self.bounds:
                 rect = geom.boundingBox()
+
                 p1 = QgsPoint(rect.xMinimum(), rect.yMinimum())
                 p2 = QgsPoint(rect.xMaximum(), rect.yMaximum())
                 places = API.places.inside(p1.x(), p1.y(), p2.x(), p2.y(),
-                                           category=self.categories)
+                                           category_or=self.categories)
+
                 self.total += len(places)
                 self.createPlaces(places, geom)
-                progress += 1
-                self.progress.emit(totalBounds, progress, len(places), geom)
         except Exception as e:
             self.finished.emit(False, self.created)
             self.error.emit(e, traceback.format_exc())
@@ -154,4 +154,3 @@ class WikimapiaImportByIdWorker(WikimapiaImportWorker):
             self.error.emit(e, traceback.format_exc())
             return
         self.finished.emit(True, 1)
-

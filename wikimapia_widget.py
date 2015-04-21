@@ -110,21 +110,8 @@ class WikimapiaWidget(QDockWidget, Ui_WikimapiaWidget):
                 self.categoriesEdit.text())
         if worker is None: return
         self.createProgress()
-        self.percents = 0
         self.setEnabled(False)
 
-        #self.createBoundsLayer()
-        #worker.finished.connect(self.importFinished)
-        #worker.error.connect(self.importError)
-        #worker.run(self.progressBar)
-        #self.importFinished(True, )
-        #self.thread = thread = QThread(QThread.currentThread()) #self.iface.mainWindow())
-        #worker.moveToThread(thread)
-        #worker.progress.connect(self.progressBar.setValue)
-        #thread.started.connect(worker.doWork)
-        # self.iface.mainWindow().processEvents()
-        #thread.start()
-        #QgsApplication.processEvents()
         thread = QThread(self)
         worker.moveToThread(thread)
         worker.finished.connect(self.importFinished)
@@ -145,7 +132,6 @@ class WikimapiaWidget(QDockWidget, Ui_WikimapiaWidget):
                 self.tr('import successfull'),
                 self.tr('{0} features imported successfully').format(total),
                 duration = 3)
-        #if self.boundsLayer: self.boundsLayer.removeSelection()
         self.setEnabled(True)
         self.hideProgress()
 
@@ -155,14 +141,8 @@ class WikimapiaWidget(QDockWidget, Ui_WikimapiaWidget):
             msg,
             level = QgsMessageBar.CRITICAL)
 
-    def importProgress(self, total, progress, items, geom):
-        percentsNew = (progress * 100) / total
-        if percentsNew != self.percents:
-            self.percents = percentsNew
-            self.progressBar.setValue(self.percents)
-        f = QgsFeature()
-        f.setGeometry(geom)
-        self.bounds.dataProvider().addFeatures([f])
+    def importProgress(self, progress):
+        self.progressBar.setValue(progress)
 
     def createLayer(self):
         selectedIndex = self.destCombo.currentIndex()
